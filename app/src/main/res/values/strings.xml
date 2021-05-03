@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Music Lyrics</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tv_name_song">Nombre de la cancion</string>
+    <string name="search">Buscar</string>
+</resources>
