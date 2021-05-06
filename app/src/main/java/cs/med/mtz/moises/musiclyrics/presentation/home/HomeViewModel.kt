@@ -12,17 +12,19 @@ import kotlinx.coroutines.flow.flow
 
 class HomeViewModel(
     //private val service: ApiService
-): ViewModel() {
+) : ViewModel() {
 
 
     private val service: ApiService = retrofit.create<ApiService>(ApiService::class.java)
 
 
-
-    fun getSongsLiveData(valueSong:String): LiveData<List<Song>> = flow {
-        val response = service.getSuggestSongs(valueSong)
-        val songsDto: List<SongDto> = response.data
-        val songs: List<Song> = songsDto.map { it.toSong() }
-        emit(songs)
+    fun getSongsLiveData(valueSong: String): LiveData<List<Song>> = flow {
+        try {
+            val response = service.getSuggestSongs(valueSong)
+            val songsDto: List<SongDto> = response.data
+            val songs: List<Song> = songsDto.map { it.toSong() }
+            emit(songs)
+        } catch (exception: Exception) {
+        }
     }.asLiveData(Dispatchers.IO)
 }

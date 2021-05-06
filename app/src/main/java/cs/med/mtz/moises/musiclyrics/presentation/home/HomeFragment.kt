@@ -5,15 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cs.med.mtz.moises.lyrics.domain.entity.Song
+import cs.med.mtz.moises.musiclyrics.R
 import cs.med.mtz.moises.musiclyrics.databinding.FragmentHomeBinding
 import cs.med.mtz.moises.musiclyrics.presentation.home.adapter.SongAdapter
 
 class HomeFragment : Fragment() {
 
     /* */
-    lateinit var homeViewModel: HomeViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     /* */
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
@@ -48,9 +52,19 @@ class HomeFragment : Fragment() {
 
     /** */
     private fun fillRecyclerView(songs: List<Song>) {
-        val songAdapter = SongAdapter(songs)
+        val songAdapter = SongAdapter(songs, ::onSongClickListener)
         binding.rvSongs.adapter = songAdapter
         binding.rvSongs.layoutManager = LinearLayoutManager(this.context)
+    }
+
+    /** */
+    private fun onSongClickListener(song: Song) {
+        val title = song.title
+        val artist = song.artist
+        val image = song.imageUrl
+        val direction = HomeFragmentDirections
+            .actionHomeToLyricsDetailsFragment(title,artist,image)
+        findNavController().navigate(direction)
     }
 
 }

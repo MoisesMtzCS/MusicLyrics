@@ -19,21 +19,18 @@ class SplashFragment : Fragment() {
     private val binding by lazy { FragmentSplashBinding.inflate(layoutInflater) }
 
     /** */
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = binding.root
 
+    /** */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startFragmentSplash()
     }
 
-    fun setupViews() {
-
-    }
-
+    /** */
     private fun startFragmentSplash() {
         CoroutineScope(Dispatchers.Main).launch {
             delay(1200)
