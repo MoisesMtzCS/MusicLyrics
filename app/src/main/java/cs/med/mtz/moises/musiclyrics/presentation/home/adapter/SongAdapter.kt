@@ -32,6 +32,7 @@ class SongAdapter(
     /** Setup the view info */
     override fun onBindViewHolder(holder: SongViewHolder, position: Int) {
         val song: Song = songs[position]
+        holder.binding.tvArtist.text = song.artist
         holder.binding.tvTitle.text = song.title
 
         Glide.with(holder.itemView)

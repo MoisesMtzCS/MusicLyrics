@@ -1,5 +1,6 @@
 package cs.med.mtz.moises.musiclyrics.presentation.home
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,11 +14,16 @@ import cs.med.mtz.moises.lyrics.domain.entity.Song
 import cs.med.mtz.moises.musiclyrics.R
 import cs.med.mtz.moises.musiclyrics.databinding.FragmentHomeBinding
 import cs.med.mtz.moises.musiclyrics.presentation.home.adapter.SongAdapter
+import org.koin.android.ext.android.get
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
 
     /* */
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var dialog: AlertDialog
+
+    /* */
+    private val homeViewModel: HomeViewModel by viewModel()
 
     /* */
     private val binding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
@@ -36,17 +42,25 @@ class HomeFragment : Fragment() {
     /** */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        homeViewModel = HomeViewModel()
+        execute()
+    }
+
+    /** */
+    private fun execute() {
         loadCSongsList()
     }
 
     /** */
     private fun loadCSongsList() {
         binding.searchButton.setOnClickListener {
-            homeViewModel.getSongsLiveData(value)
-                .observe(viewLifecycleOwner) { songs ->
-                    fillRecyclerView(songs)
-                }
+            if (value.isNotBlank()) {
+                showAlert()
+                homeViewModel.getSongsLiveData(value)
+                    .observe(viewLifecycleOwner) { songs ->
+                        hideAlert()
+                        fillRecyclerView(songs)
+                    }
+            } else alert()
         }
     }
 
@@ -63,8 +77,31 @@ class HomeFragment : Fragment() {
         val artist = song.artist
         val image = song.imageUrl
         val direction = HomeFragmentDirections
-            .actionHomeToLyricsDetailsFragment(title,artist,image)
+            .actionHomeToLyricsDetailsFragment(title, artist, image)
         findNavController().navigate(direction)
+    }
+
+    /** */
+    private fun showAlert() {
+        val builder = AlertDialog.Builder(this.context)
+            .setView(R.layout.loading)
+            .setCancelable(false)
+        dialog = builder.create()
+        dialog.show()
+    }
+
+    /** */
+    private fun hideAlert() {
+        dialog.dismiss()
+    }
+
+    /** */
+    private fun alert() {
+        val builder = AlertDialog.Builder(this.context)
+            .setTitle(getString(R.string.empty))
+            .setPositiveButton("aceptar", null)
+        dialog = builder.create()
+        dialog.show()
     }
 
 }
