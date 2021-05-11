@@ -7,8 +7,11 @@ import cs.med.mtz.moises.lyrics.domain.entity.Song
 import cs.med.mtz.moises.musiclyrics.data.api.ApiService
 import cs.med.mtz.moises.musiclyrics.data.dto.SongDto
 import cs.med.mtz.moises.musiclyrics.data.http_client.retrofit
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 
 class HomeViewModel(
     //private val service: ApiService
@@ -27,4 +30,5 @@ class HomeViewModel(
         } catch (exception: Exception) {
         }
     }.asLiveData(Dispatchers.IO)
+
 }

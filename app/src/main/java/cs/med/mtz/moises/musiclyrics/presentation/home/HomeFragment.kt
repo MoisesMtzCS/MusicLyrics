@@ -1,26 +1,25 @@
 package cs.med.mtz.moises.musiclyrics.presentation.home
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import cs.med.mtz.moises.lyrics.domain.entity.Song
 import cs.med.mtz.moises.musiclyrics.R
 import cs.med.mtz.moises.musiclyrics.databinding.FragmentHomeBinding
 import cs.med.mtz.moises.musiclyrics.presentation.home.adapter.SongAdapter
-import org.koin.android.ext.android.get
 import org.koin.android.viewmodel.ext.android.viewModel
+
 
 class HomeFragment : Fragment() {
 
     /* */
-    private lateinit var dialog: AlertDialog
+    private lateinit var loaderDialog: Dialog
 
     /* */
     private val homeViewModel: HomeViewModel by viewModel()
@@ -54,10 +53,10 @@ class HomeFragment : Fragment() {
     private fun loadCSongsList() {
         binding.searchButton.setOnClickListener {
             if (value.isNotBlank()) {
-                showAlert()
+                showLoader()
                 homeViewModel.getSongsLiveData(value)
                     .observe(viewLifecycleOwner) { songs ->
-                        hideAlert()
+                        hideLoader()
                         fillRecyclerView(songs)
                     }
             } else alert()
@@ -82,26 +81,26 @@ class HomeFragment : Fragment() {
     }
 
     /** */
-    private fun showAlert() {
-        val builder = AlertDialog.Builder(this.context)
+    private fun showLoader() {
+        loaderDialog = AlertDialog.Builder(this.context, R.style.MyDialog)
             .setView(R.layout.loading)
             .setCancelable(false)
-        dialog = builder.create()
-        dialog.show()
+            .create()
+        loaderDialog.show()
     }
 
     /** */
-    private fun hideAlert() {
-        dialog.dismiss()
+    private fun hideLoader() {
+        loaderDialog.dismiss()
     }
 
     /** */
     private fun alert() {
-        val builder = AlertDialog.Builder(this.context)
+        AlertDialog.Builder(this.context)
             .setTitle(getString(R.string.empty))
             .setPositiveButton("aceptar", null)
-        dialog = builder.create()
-        dialog.show()
+            .create()
+            .show()
     }
 
 }

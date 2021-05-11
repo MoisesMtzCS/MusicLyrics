@@ -51,7 +51,7 @@ class LyricsDetailsFragment : Fragment() {
 
     /** */
     private fun execute() {
-        showAlert()
+        showLoader()
         showLyrics()
     }
 
@@ -73,8 +73,8 @@ class LyricsDetailsFragment : Fragment() {
     }
 
     /** */
-    private fun showAlert() {
-        val builder = AlertDialog.Builder(this.context)
+    private fun showLoader() {
+        val builder = AlertDialog.Builder(this.context,R.style.MyDialog)
             .setView(R.layout.loading)
             .setCancelable(false)
         dialog = builder.create()
